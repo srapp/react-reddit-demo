@@ -1,0 +1,112 @@
+<html>
+<head>
+	<title>Let's React</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css"/>
+	<style type="text/css">
+		*, *:before, *:after {
+			box-sizing: border-box;
+		}
+	</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.js"></script>
+
+<!-- Application code-->
+<script type="text/babel">
+
+	function getPosts(subreddit) {
+		return fetch(`https://api.reddit.com/r/${subreddit}/hot`)
+				.then(response => response.json())
+				.then(json => json.data.children
+						.filter(child => child.data.post_hint === 'image')
+						.map(child => ({
+							url: child.data.url,
+							title: child.data.title
+						}))
+				);
+	}
+	getPosts('aww').then(console.log);
+
+	const Photo = React.createClass({
+		render() {
+			const containerStyle = {
+				border: 'solid 1px black',
+				width: 400,
+				height: 410,
+				padding: 10,
+				margin: 10,
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'space-between'
+			};
+
+			const imageStyle = {
+				maxWidth: 360,
+				maxHeight: 360
+			};
+
+			return (
+					<div style={containerStyle}>
+						<img style={imageStyle} src={this.props.url}/>
+						<div>{this.props.title}</div>
+					</div>
+			);
+		}
+	});
+
+	const PhotoGroup = React.createClass({
+		render() {
+			const galleryStyles = {
+				display: 'flex',
+				flexWrap: 'wrap'
+			};
+
+			const photos = this.props.photos.map((photo, index) => (
+					<Photo key={index} url={photo.url} title={photo.title}/>
+			));
+
+			return (
+					<div style={galleryStyles}>
+						{photos}
+					</div>
+			);
+		}
+	});
+
+	const RedditPhotoViewer = React.createClass({
+		getInitialState() {
+			return {
+				photos: [
+					{ url: 'http://i.imgur.com/VjKeYOr.jpg', title: 'What a cute puppy!'},
+					{ url: 'http://i.imgur.com/TycDgJU.jpg', title: 'What a cute cat!'},
+					{ url: 'http://i.imgur.com/6BxbIIZ.jpg', title: 'What a good dog!'}
+				]
+			}
+		},
+
+		render() {
+			return (
+					<div>
+						<h1>Reddit Photo Viewer</h1>
+						<PhotoGroup photos={this.state.photos}/>
+					</div>
+			);
+		}
+	});
+
+	ReactDOM.render(
+			<RedditPhotoViewer/>,
+			document.getElementById('root')
+	);
+
+</script>
+
+</body>
+</html>

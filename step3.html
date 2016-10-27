@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title>Let's React</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css"/>
+	<style type="text/css">
+		*, *:before, *:after {
+			box-sizing: border-box;
+		}
+	</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.js"></script>
+
+<!-- Application code-->
+<script type="text/babel">
+
+	const Photo = React.createClass({
+		render() {
+			return (
+					<div>
+						<img src="http://i.imgur.com/VjKeYOr.jpg"/>
+						<div>What a cute puppy!</div>
+					</div>
+			);
+		}
+	});
+
+	ReactDOM.render(
+			<Photo/>,
+			document.getElementById('root')
+	);
+
+</script>
+
+</body>
+</html>
